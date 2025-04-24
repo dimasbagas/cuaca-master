@@ -1,10 +1,12 @@
 import { Stack } from "expo-router";
+import React from "react";
 
 export default function RootLayout() {
   return (
-    <Stack initialRouteName="loadscreen">
-      <Stack.Screen name="loadscreen" options={{ headerShown: false }} />
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-    </Stack>
+    <Stack
+      screenOptions={{
+        headerShown: false, // berlaku untuk semua layar
+      }}
+    />
   );
 }
