@@ -75,9 +75,10 @@ const homescreen = () => {
                 onBlur={() => setShowInput(false)}
               />
             )}
+            <TouchableOpacity onPress={() => router.push('/slidescreen')}>
             <Feather name="bar-chart-2" size={24} color="white" />
+            </TouchableOpacity>
           </View>
-
 
 
           {weather && weather.main && (
@@ -143,21 +144,6 @@ const homescreen = () => {
             </View>
           )}
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
-          <TouchableOpacity
-            style={style.button}
-            onPress={() => router.push('/cuaca')}
-          >
-            <Text style={{ color: 'white' }}>Cuaca</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={style.button}
-            onPress={() => router.push('/todolist')}
-          >
-            <Text style={{ color: 'white' }}>Todolist</Text>
-          </TouchableOpacity>
-        </View>
       </ImageBackground>
     </>
   );
@@ -171,6 +157,7 @@ const style = StyleSheet.create({
     alignItems: "center",
     height: 50,
     marginBottom: 20,
+    justifyContent: 'space-between'
   },
   textInput: {
     backgroundColor: "#f0f0f0f0",
