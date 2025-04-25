@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 'auto',
-    marginBottom: 20,
+    marginBottom: 5,
   },
   navButton: {
     flex: 1,
