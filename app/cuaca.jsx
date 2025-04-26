@@ -54,6 +54,8 @@ const homescreen = () => {
             backgroundColor: "rgba(0,0,0,0.3)",
           }}
         >
+
+        {/* input daerah */}
           <View style={style.container}>
             {!showInput ? (
               <TouchableOpacity
@@ -80,7 +82,7 @@ const homescreen = () => {
             </TouchableOpacity>
           </View>
 
-
+            {/* konten */}
           {weather && weather.main && (
             <View style={{ flex: 1 }}>
               {/* Bagian atas */}
@@ -117,6 +119,7 @@ const homescreen = () => {
                 }}
               ></View>
 
+                {/* bagian bawah */}
               <View style={{}}>
                 <View
                   style={{

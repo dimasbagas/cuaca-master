@@ -8,6 +8,8 @@ const Index = () => {
   const router = useRouter();
 
   return (
+    
+    // gradasi background color
     <LinearGradient colors={['#643DFF', '#B214A7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={style.gradient}>
 
     {/* Status bar */}
