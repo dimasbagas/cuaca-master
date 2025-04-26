@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -29,57 +29,70 @@ const Slidescreen = () => {
     }
   };
 
+  const handleAddLocation = async () => {
+    if (!newLocation.trim()) return; // Jangan lanjut kalau input kosong
+
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${newLocation}&appid=44be9e79396d022e0b9503a4fe80ea26&units=metric`
+      );
+      const data = await response.json();
+
+      if (data.cod === 200) { // Kalau kota valid
+        setWeather((prevWeather) => [...prevWeather, data]);
+        setLocation((prevLocation) => [...prevLocation, newLocation]);
+      } else {
+        console.error("Kota tidak ditemukan:", data.message);
+      }
+    } catch (error) {
+      console.error("Error menambahkan cuaca", error);
+    }
+
+    setNewLocation(''); // Kosongkan input setelah submit
+    setShowInput(false); // Sembunyikan input
+  };
+
+  const handleCancelInput = () => {
+    setNewLocation('');
+    setShowInput(false);
+  };
+
   useEffect(() => {
     getWeather();
   },
     []);
 
-    const handleAddLocation = async () => {
-      if (!newLocation.trim()) return; // Jangan lanjut kalau input kosong
-    
-      try {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${newLocation}&appid=44be9e79396d022e0b9503a4fe80ea26&units=metric`
-        );
-        const data = await response.json();
-    
-        if (data.cod === 200) { // Kalau kota valid
-          setWeather((prevWeather) => [...prevWeather, data]);
-          setLocation((prevLocation) => [...prevLocation, newLocation]);
-        } else {
-          console.error("Kota tidak ditemukan:", data.message);
-        }
-      } catch (error) {
-        console.error("Error menambahkan cuaca", error);
-      }
-    
-      setNewLocation(''); // Kosongkan input setelah submit
-      setShowInput(false); // Sembunyikan input
-    };
-    
-
   return (
     <LinearGradient colors={['#643DFF', '#B214A7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={style.gradient}>
 
       <View style={{ flex: 1, padding: 20, gap: 10 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20, }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => router.push('/cuaca')}>
-              <Feather name="arrow-left" size={40} color="white" />
-            </TouchableOpacity>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', marginLeft: 20, color: 'white' }}>Manage Location</Text>
-          </View>
-          <View style={{}}>
-            {!showInput ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 20,
+            gap: 10,
+          }}
+        >
+          {!showInput ? (
+            <>
+              <TouchableOpacity onPress={() => router.push('/cuaca')}>
+                <Feather name="arrow-left" size={40} color="white" />
+              </TouchableOpacity>
+              <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white' }}>
+                Manage Location
+              </Text>
               <TouchableOpacity
-                style={{ marginLeft: 10 }}
+                style={{ marginLeft: 'auto' }}
                 onPress={() => setShowInput(true)}
               >
-                <Icon name="plus" size={24} color={"#fff"} />
+                <Icon name="plus" size={24} color="white" />
               </TouchableOpacity>
-            ) : (
+            </>
+          ) : (
+            <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
               <TextInput
-                style={style.textInput}
+                style={[style.textInput, { flex: 1 }]}
                 placeholder="Cari lokasi..."
                 placeholderTextColor="white"
                 autoFocus={true}
@@ -87,10 +100,12 @@ const Slidescreen = () => {
                 value={newLocation}
                 onChangeText={setNewLocation}
                 onSubmitEditing={handleAddLocation}
-                onBlur={() => setShowInput(false)}
               />
-            )}
-          </View>
+              <TouchableOpacity onPress={handleCancelInput} style={{ marginLeft: 10 }}>
+                <Icon name="times" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         {/* menambahkan cuaca */}
@@ -151,11 +166,11 @@ const style = StyleSheet.create({
     flex: 1,
   },
   textInput: {
-  height: 40,
-  borderColor: 'white',
-  borderWidth: 1,
-  borderRadius: 8,
-  paddingHorizontal: 10,
-  color: 'white',
-}
+    height: 40,
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    color: 'white',
+  }
 });
