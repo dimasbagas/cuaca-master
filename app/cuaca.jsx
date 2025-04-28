@@ -161,7 +161,6 @@ const homescreen = () => {
             </View>
           )}
         </View>
-
     </LinearGradient>
   );
 };
@@ -177,14 +176,12 @@ const style = StyleSheet.create({
     justifyContent: 'space-between'
   },
   textInput: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
-    elevation: 3,
-    flex: 1,
-    marginHorizontal: 20,
-    paddingHorizontal: 10,
     height: 40,
-    color: "#000",
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    color: 'white',
   },
   resultText: {
     color: "#f0f0f0",
