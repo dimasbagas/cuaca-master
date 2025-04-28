@@ -10,7 +10,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const Slidescreen = () => {
   const router = useRouter();
   const [weather, setWeather] = useState([]);
-  const [location, setLocation] = useState(["bandung", "jakarta"]);
+  const [location, setLocation] = useState(["surabaya", "jakarta"]);
   const [showInput, setShowInput] = useState(false);
   const [newLocation, setNewLocation] = useState('');
 
@@ -30,7 +30,7 @@ const Slidescreen = () => {
   };
 
   const handleAddLocation = async () => {
-    if (!newLocation.trim()) return; // Jangan lanjut kalau input kosong
+    if (!newLocation.trim()) return;
 
     try {
       const response = await fetch(
@@ -38,7 +38,7 @@ const Slidescreen = () => {
       );
       const data = await response.json();
 
-      if (data.cod === 200) { // Kalau kota valid
+      if (data.cod === 200) { 
         setWeather((prevWeather) => [...prevWeather, data]);
         setLocation((prevLocation) => [...prevLocation, newLocation]);
       } else {
@@ -48,8 +48,8 @@ const Slidescreen = () => {
       console.error("Error menambahkan cuaca", error);
     }
 
-    setNewLocation(''); // Kosongkan input setelah submit
-    setShowInput(false); // Sembunyikan input
+    setNewLocation(''); 
+    setShowInput(false); 
   };
 
   const handleCancelInput = () => {

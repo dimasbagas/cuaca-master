@@ -4,13 +4,13 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  ImageBackground,
 } from "react-native";
 import { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const homescreen = () => {
   const [showInput, setShowInput] = useState(false);
@@ -32,18 +32,19 @@ const homescreen = () => {
       });
   };
 
+  const handleCancelInput = () => {
+    setShowInput(false);
+  };
+
   useEffect(() => {
     getWeather();
-  },
-    []);
+  }, []);
 
   return (
-    <>
-      <ImageBackground
-        source={require("../assets/images/night2.jpg")}
-        style={{ flex: 1 }}
-        resizeMode="cover"
-      >
+
+
+    <LinearGradient colors={['#643DFF', '#B214A7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={style.gradient}>
+
         <StatusBar style="light" translucent backgroundColor="transparent" />
 
         <View
@@ -54,35 +55,39 @@ const homescreen = () => {
             backgroundColor: "rgba(0,0,0,0.3)",
           }}
         >
-
-        {/* input daerah */}
+          {/* input daerah */}
           <View style={style.container}>
-            {!showInput ? (
+            {showInput ? (
+              <>
+                <TouchableOpacity onPress={handleCancelInput} style={{ marginLeft: 10 }}>
+                  <Icon name="times" size={24} color="white" />
+                </TouchableOpacity>
+                <TextInput
+                  style={[style.textInput, { flex: 1, marginLeft: 10 }]}
+                  placeholder="Cari lokasi..."
+                  placeholderTextColor="#888"
+                  autoFocus={true}
+                  keyboardType="web-search"
+                  value={location}
+                  onChangeText={setLocation}
+                  onSubmitEditing={getWeather}
+                />
+              </>
+            ) : (
               <TouchableOpacity
                 style={{ marginLeft: 10 }}
                 onPress={() => setShowInput(true)}
               >
                 <Icon name="search" size={24} color={"#fff"} />
               </TouchableOpacity>
-            ) : (
-              <TextInput
-                style={style.textInput}
-                placeholder="Cari lokasi..."
-                placeholderTextColor="#888"
-                autoFocus={true}
-                keyboardType="web-search"
-                value={location}
-                onChangeText={setLocation}
-                onSubmitEditing={getWeather}
-                onBlur={() => setShowInput(false)}
-              />
             )}
+
             <TouchableOpacity onPress={() => router.push('/slidescreen')}>
-            <Feather name="bar-chart-2" size={24} color="white" />
+              <Feather name="bar-chart-2" size={24} color="white" />
             </TouchableOpacity>
           </View>
 
-            {/* konten */}
+          {/* konten */}
           {weather && weather.main && (
             <View style={{ flex: 1 }}>
               {/* Bagian atas */}
@@ -117,10 +122,10 @@ const homescreen = () => {
                   borderBottomWidth: 1,
                   marginTop: 20,
                 }}
-              ></View>
+              />
 
-                {/* bagian bawah */}
-              <View style={{}}>
+              {/* bagian bawah */}
+              <View>
                 <View
                   style={{
                     flexDirection: "row",
@@ -131,24 +136,33 @@ const homescreen = () => {
                     <Text style={style.humidityText}>Clouds</Text>
                     <Text style={style.valueText}>{weather.clouds.all}</Text>
                     <Text style={style.humidityText}>%</Text>
+                    <View style={style.infobar}>
+                      <View style={{width: weather.clouds.all /2, height: 5, backgroundColor: '#69F0AE'}}></View>
+                    </View>
                   </View>
                   <View style={{ alignItems: "center" }}>
-                    <Text style={style.humidityText}>Humadity</Text>
+                    <Text style={style.humidityText}>Humidity</Text>
                     <Text style={style.valueText}>{weather.main.humidity}</Text>
-                    <Text style={style.humidityText}>°C</Text>
+                    <Text style={style.humidityText}>%</Text>
+                    <View style={style.infobar}>
+                      <View style={{width: weather.clouds.all /2, height: 5, backgroundColor: '#69F0AE'}}></View>
+                    </View>
                   </View>
                   <View style={{ alignItems: "center" }}>
                     <Text style={style.humidityText}>Wind</Text>
                     <Text style={style.valueText}>{weather.wind.speed}</Text>
                     <Text style={style.humidityText}>m/s</Text>
+                    <View style={style.infobar}>
+                      <View style={{width: weather.clouds.all /2, height: 5, backgroundColor: '#69F0AE'}}></View>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
           )}
         </View>
-      </ImageBackground>
-    </>
+
+    </LinearGradient>
   );
 };
 
@@ -163,7 +177,7 @@ const style = StyleSheet.create({
     justifyContent: 'space-between'
   },
   textInput: {
-    backgroundColor: "#f0f0f0f0",
+    backgroundColor: "#f0f0f0",
     borderRadius: 8,
     elevation: 3,
     flex: 1,
@@ -173,7 +187,7 @@ const style = StyleSheet.create({
     color: "#000",
   },
   resultText: {
-    color: "#f0f0f0f0",
+    color: "#f0f0f0",
     fontSize: 14,
     marginVertical: 4,
   },
@@ -189,9 +203,17 @@ const style = StyleSheet.create({
   button: {
     padding: 10,
     backgroundColor: 'blue',
-    flex: 1, 
-    alignItems: 'center', 
+    flex: 1,
+    alignItems: 'center',
     marginHorizontal: 20,
     borderRadius: 8,
+  },
+  gradient: {
+    flex: 1,
+  },
+  infobar: {
+    width: 45,
+    height: 5,
+    backgroundColor: 'rgba(225, 225, 225, 0.5)'
   }
 });
